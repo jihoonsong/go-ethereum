@@ -95,6 +95,7 @@ var caps = []string{
 	"engine_getPayloadV3",
 	"engine_getPayloadV4",
 	"engine_getBlobsV1",
+	"engine_getInclusionListV1",
 	"engine_newPayloadV1",
 	"engine_newPayloadV2",
 	"engine_newPayloadV3",
@@ -537,6 +538,19 @@ func (api *ConsensusAPI) GetBlobsV1(hashes []common.Hash) ([]*engine.BlobAndProo
 		}
 	}
 	return res, nil
+}
+
+func (api *ConsensusAPI) GetInclusionListV1(parentHash common.Hash) (engine.InclusionList, error) {
+	args := &miner.BuildInclusionListArgs{
+		Parent: parentHash,
+	}
+	inclusionList, err := api.eth.Miner().BuildInclusionList(args)
+	if err != nil {
+		log.Error("Failed to build inclusion list", "err", err)
+		return nil, err
+	}
+
+	return inclusionList, nil
 }
 
 // Helper for NewPayload* methods.
