@@ -237,8 +237,8 @@ func (api *ConsensusAPI) ForkchoiceUpdatedV3(update engine.ForkchoiceStateV1, pa
 			return engine.STATUS_INVALID, attributesErr("missing withdrawals")
 		case params.BeaconRoot == nil:
 			return engine.STATUS_INVALID, attributesErr("missing beacon root")
-		case !api.checkFork(params.Timestamp, forks.Cancun, forks.Prague):
-			return engine.STATUS_INVALID, unsupportedForkErr("fcuV3 must only be called for cancun or prague payloads")
+		case !api.checkFork(params.Timestamp, forks.Cancun, forks.Prague, forks.Eip7805):
+			return engine.STATUS_INVALID, unsupportedForkErr("fcuV3 must only be called for cancun, prague or eip7805 payloads")
 		}
 	}
 	// TODO(matt): the spec requires that fcu is applied when called on a valid
@@ -289,8 +289,8 @@ func (api *ConsensusAPI) ForkchoiceUpdatedWithWitnessV3(update engine.Forkchoice
 			return engine.STATUS_INVALID, attributesErr("missing withdrawals")
 		case params.BeaconRoot == nil:
 			return engine.STATUS_INVALID, attributesErr("missing beacon root")
-		case !api.checkFork(params.Timestamp, forks.Cancun, forks.Prague):
-			return engine.STATUS_INVALID, unsupportedForkErr("fcuV3 must only be called for cancun or prague payloads")
+		case !api.checkFork(params.Timestamp, forks.Cancun, forks.Prague, forks.Eip7805):
+			return engine.STATUS_INVALID, unsupportedForkErr("fcuV3 must only be called for cancun, prague or eip7805 payloads")
 		}
 	}
 	// TODO(matt): the spec requires that fcu is applied when called on a valid
@@ -627,8 +627,8 @@ func (api *ConsensusAPI) NewPayloadV4(params engine.ExecutableData, versionedHas
 		return invalidStatus, paramsErr("nil beaconRoot post-cancun")
 	case executionRequests == nil:
 		return invalidStatus, paramsErr("nil executionRequests post-prague")
-	case !api.checkFork(params.Timestamp, forks.Prague):
-		return invalidStatus, unsupportedForkErr("newPayloadV3 must only be called for cancun payloads")
+	case !api.checkFork(params.Timestamp, forks.Prague, forks.Eip7805):
+		return invalidStatus, unsupportedForkErr("newPayloadV4 must only be called for prague or eip7805 payloads")
 	}
 	requests := convertRequests(executionRequests)
 	if err := validateRequests(requests); err != nil {
@@ -704,8 +704,8 @@ func (api *ConsensusAPI) NewPayloadWithWitnessV4(params engine.ExecutableData, v
 		return invalidStatus, paramsErr("nil beaconRoot post-cancun")
 	case executionRequests == nil:
 		return invalidStatus, paramsErr("nil executionRequests post-prague")
-	case !api.checkFork(params.Timestamp, forks.Prague):
-		return invalidStatus, unsupportedForkErr("newPayloadV3 must only be called for cancun payloads")
+	case !api.checkFork(params.Timestamp, forks.Prague, forks.Eip7805):
+		return invalidStatus, unsupportedForkErr("newPayloadV4 must only be called for prague or eip7805 payloads")
 	}
 	requests := convertRequests(executionRequests)
 	if err := validateRequests(requests); err != nil {
